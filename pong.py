@@ -1,4 +1,5 @@
 import turtle
+import os
 
 wn = turtle.Screen()
 wn.title("Pong by @narshah1n")
@@ -47,7 +48,7 @@ ball.dy = 2
 # Pen
 pen = turtle.Turtle()
 pen.speed(0)
-pen.color("pink")
+pen.color("yellow")
 pen.penup()
 pen.hideturtle()
 pen.goto(0, 260)
@@ -90,14 +91,17 @@ while True:
 # Move the ball
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
+
 # Border checking
     if ball.ycor() > 290:
         ball.sety(290)
         ball.dy *= -1
+        os.system("afplay error.wav&")
 
     if ball.ycor() < -290:
         ball.sety(-290)
         ball.dy *= -1
+        os.system("afplay error.wav&")
 
     if ball.xcor() > 390:
         ball.goto(0,0)
@@ -105,6 +109,7 @@ while True:
         pen.clear()
         score_a += 1
         pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+        os.system("afplay error.wav&")
 
     if ball.xcor() < -390:
         ball.goto(0,0)
@@ -112,12 +117,15 @@ while True:
         pen.clear()
         score_b += 1
         pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+        os.system("afplay error.wav&")
 
 # Paddle and ball collisions
     if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
         ball.setx(340)
         ball.dx *= -1
+        os.system("afplay high-beep.wav&")
 
     if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
         ball.setx(-340)
         ball.dx *= -1
+        os.system("afplay low-beep.wav&")
