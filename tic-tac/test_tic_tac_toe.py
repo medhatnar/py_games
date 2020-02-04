@@ -9,7 +9,6 @@ def test_letter():
 @pytest.mark.skip(reason="Letter test first")
 def test_board():
     board = Board()
-    print ('bitch', Board.board)
     board_length = len(board)
     
     assert board_length == 3
