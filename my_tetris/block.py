@@ -6,7 +6,7 @@ class Block(pygame.sprite.Sprite):
 
     # Constructor. Pass in the color of the block,
     # and its x and y position
-    def __init__(self, width=grid_unit, height=grid_unit, location=(200, 100)):
+    def __init__(self, width=grid_unit, height=grid_unit):
         # Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
 
@@ -17,8 +17,3 @@ class Block(pygame.sprite.Sprite):
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
-        self.rect.midtop = location
-
-    def update(self):
-        rotate = pygame.transform.rotate
-        self.image = rotate(self.image, 345)

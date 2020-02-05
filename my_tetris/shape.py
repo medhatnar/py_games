@@ -4,48 +4,26 @@ from block import Block
 
 class Shape(pygame.sprite.Sprite):
     def __init__(self, letter):
-        pygame.sprite.Sprite.__init__(self)
         self.speeds = [10, 20, 30]
         self.blocks = None
         self.location = (100, 200)
-        self.rotate_point = None
-        # self.hsp = 0
-        # self.vsp = 0
-        # self.forceVerticalSpeedInterval = 10
-        # self.h_speed = 10
-        # self.v_speed = 5
-        # self.angle_state = None
-        # self.h_pos = None
-        # self.v_pos = None
+        letter_surface = pygame.Surface((20, 80), pygame.SRCALPHA, 32)
+        self.letter_surface = letter_surface.convert_alpha()
 
         if letter == 'I':
             self.blocks = self._make_I()
 
-        # keys = pygame.key.get_pressed()
-        # millisecs = pygame.time.get_ticks()
-
-        # if self.forceVerticalSpeedInterval:
-        #     self.vsp = 20
-
-        # if millisecs % 500 == 0:
-        #    if not keys[pygame.K_LEFT] and keys[pygame.K_RIGHT]:
-        #     if keys[pygame.K_LEFT]:
-        #         self.hsp = -self.h_speed
-        #     else:
-        #         self.hsp = self.h_speed
-
-        #     if keys[pygame.K_DOWN]:
-        #         self.vsp += self.v_speed
-            # move()
-            # hpos += hsp
-            # vpos += vsp
-            # vsp, hsp = 0;
+    def update(self):
+        self.letter_surface = pygame.transform.rotate(self.letter_surface, 90)
 
     def _make_I(self):
         block_list = []
         incrementer = 0
+        letter_surface_rect_top = self.letter_surface.get_rect().top
+
         for block in range(4):
-            block_list.append(Block(location=(200, 100 + incrementer)))
+            new_block = Block()
+            self.letter_surface.blit(new_block.image, (0, letter_surface_rect_top + incrementer))
             incrementer += 20
-        letter_surface = pygame.Surface((20, 80))
+
         return pygame.sprite.RenderPlain(block_list)

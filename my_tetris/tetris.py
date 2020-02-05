@@ -15,27 +15,28 @@ def main(base_width, base_height):
     background = background.convert()
 
     image = load_image('big-galaxy', (base_width, base_height))
+    image_rect = image.get_rect()
 
     background.blit(image, (0, 0))
-    screen.blit(background, image.get_rect())
+    screen.blit(background, image_rect)
 
     grid_size = base_width, base_height = base_width - base_width/3, base_height + 10
     grid = pygame.Rect((4, -15), grid_size)
 
-    screen.blit(background, image.get_rect())
+    screen.blit(background, image_rect)
     pygame.draw.rect(screen, white, grid, 10)
 
     i_shape = Shape('I')
-    i_shape.blocks.draw(screen)
+    screen.blit(i_shape.letter_surface,(100,100))
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
             if event.type == pygame.KEYDOWN and event.key == 32:
-                i_shape.blocks.update()
+                i_shape.update()
 
-        i_shape.blocks.draw(screen)
+        screen.blit(i_shape.letter_surface, (100,100))
         pygame.display.flip()
 
 
