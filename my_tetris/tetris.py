@@ -24,7 +24,7 @@ def main(base_width, base_height):
     grid = pygame.Rect((4, -15), grid_size)
 
     screen.blit(background, image_rect)
-    pygame.draw.rect(screen, white, grid, 10)
+    pygame.draw.rect(screen, white, grid, 10) 
 
     i_shape = Shape('I')
     screen.blit(i_shape.letter_surface,(100,100))
@@ -35,7 +35,15 @@ def main(base_width, base_height):
 
             if event.type == pygame.KEYDOWN and event.key == 32:
                 i_shape.update()
+                screen.blit(background, i_shape.last_location)
+            if event.type == pygame.KEYDOWN and event.key == 274:
+                print(event.key)
+                # left - 276
+                # right - 275
+                # down - 274
 
+                
+        pygame.draw.rect(screen, white, grid, 10) 
         screen.blit(i_shape.letter_surface, (100,100))
         pygame.display.flip()
 

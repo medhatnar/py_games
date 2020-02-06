@@ -1,19 +1,20 @@
 import pygame
 from block import Block
+from utilities import v_speed, h_speed
 
 
 class Shape(pygame.sprite.Sprite):
     def __init__(self, letter):
-        self.speeds = [10, 20, 30]
         self.blocks = None
-        self.location = (100, 200)
         letter_surface = pygame.Surface((20, 80), pygame.SRCALPHA, 32)
         self.letter_surface = letter_surface.convert_alpha()
+        self.last_location = None
 
         if letter == 'I':
             self.blocks = self._make_I()
 
     def update(self):
+        self.last_location = self.letter_surface.get_rect()
         self.letter_surface = pygame.transform.rotate(self.letter_surface, 90)
 
     def _make_I(self):
