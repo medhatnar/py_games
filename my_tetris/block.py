@@ -1,12 +1,12 @@
 import pygame
-from utilities import load_image, grid_unit
+from utilities import load_image, GRID_UNIT
 
 
 class Block(pygame.sprite.Sprite):
 
     # Constructor. Pass in the color of the block,
     # and its x and y position
-    def __init__(self, width=grid_unit, height=grid_unit):
+    def __init__(self, width=GRID_UNIT, height=GRID_UNIT):
         # Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
 
