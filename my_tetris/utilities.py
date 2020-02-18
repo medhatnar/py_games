@@ -4,15 +4,23 @@ import pygame
 
 # Constants
 
-# sizes
-GRID_UNIT = 20
+# SIZES
+GRID_UNIT = 15
 BASE_WIDTH = 600
 BASE_HEIGHT = 600
+GRID_SIDE_LEFT = pygame.Rect((0, 0, 10, 600)).inflate(25,0)
+GRID_SIDE_RIGHT = pygame.Rect((395, 0, 10, 600)).inflate(-10,0)
+GRID_SIDE_BOTTOM = pygame.Rect((0, 600, 400, 10)).inflate(0, -5)
+GRID_SIDES = [GRID_SIDE_LEFT, GRID_SIDE_RIGHT, GRID_SIDE_BOTTOM]
 # SPEEDS
+FALL_SPEED = 10
 V_SPEED = 20
 H_SPEED = 10
 # TIME
 WAIT_TIME = -0.05
+# STANCES
+VERTICAL = 'vert'
+SIDE = 'side'
 # KEYS
 SPACE_BAR = 32
 LEFT = 276
@@ -42,5 +50,4 @@ def load_image(name, size, color_key=-1):
 
 def past_time(time_now):
     begin = time.time()
-    print(time_now - begin, WAIT_TIME)
     return time_now - begin > WAIT_TIME
