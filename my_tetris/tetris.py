@@ -3,8 +3,9 @@ import sys
 import pygame
 import time
 
-from utilities import load_image, past_time, GRID_SIDE_LEFT, GRID_SIDE_RIGHT, GRID_SIDE_BOTTOM, GRID_UNIT, BASE_WIDTH, BASE_HEIGHT, BLACK, WHITE
+from utilities import load_image, past_time, GRID_UNIT, BASE_WIDTH, BASE_HEIGHT, BLACK, WHITE
 from shape import Shape
+from t_shape import T_Shape
 
 
 def main(BASE_WIDTH, BASE_HEIGHT):
@@ -105,6 +106,9 @@ def main(BASE_WIDTH, BASE_HEIGHT):
     ]
 
     wall_rects = []
+    wall_rects_left = []
+    wall_rects_right = []
+    wall_rects_bottom = []
 
     for row_idx, row in enumerate(matrix):
         for i, unit in enumerate(row):
@@ -117,10 +121,17 @@ def main(BASE_WIDTH, BASE_HEIGHT):
                 row[i]['has_block'] = True
                 border_square = pygame.Surface((GRID_UNIT, GRID_UNIT))
                 border_square.fill(BLACK)
-                wall_rects.append((left,top))
                 screen.blit(border_square, (left, top))
+                wall_rects.append((left, top))
+            if i == 0:
+                wall_rects_left.append((left, top))
+            if i == 25:
+                wall_rects_right.append((left, top))
+            if row_idx == 39:
+                wall_rects_bottom.append((left, top))
 
-    i_shape = Shape('I')
+    i_shape = Shape()
+    t_shape = T_Shape()
     key_pressing = False
     delay = 0.1
     while 1:
@@ -145,6 +156,8 @@ def main(BASE_WIDTH, BASE_HEIGHT):
         time.sleep(delay)
         screen.blit(background, i_shape.last_location)
         screen.blit(i_shape.letter_surface, (i_shape.x_pos, i_shape.y_pos))
+        screen.blit(t_shape.letter_surface, (t_shape.x_pos, t_shape.y_pos))
+
         for rect in wall_rects:
             row[i]['has_block'] = True
             border_square = pygame.Surface((GRID_UNIT, GRID_UNIT))
