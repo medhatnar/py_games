@@ -47,8 +47,7 @@ def load_image(name, size, color_key=-1):
     image.set_colorkey(color_key)
 
     return image
-
-
+    
 def past_time(time_now):
     begin = time.time()
     return time_now - begin > WAIT_TIME

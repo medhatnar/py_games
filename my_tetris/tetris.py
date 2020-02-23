@@ -109,6 +109,7 @@ def main(BASE_WIDTH, BASE_HEIGHT):
     wall_rects_left = []
     wall_rects_right = []
     wall_rects_bottom = []
+    non_wall_rects = []
 
     for row_idx, row in enumerate(matrix):
         for i, unit in enumerate(row):
@@ -123,17 +124,20 @@ def main(BASE_WIDTH, BASE_HEIGHT):
                 border_square.fill(BLACK)
                 screen.blit(border_square, (left, top))
                 wall_rects.append((left, top))
+            else:
+                non_wall_rects.append(grid_square)
             if i == 0:
                 wall_rects_left.append((left, top))
             if i == 25:
                 wall_rects_right.append((left, top))
             if row_idx == 39:
                 wall_rects_bottom.append((left, top))
-
+    # print(matrix[1][13]) starting grid for i_shape
     i_shape = Shape()
-    t_shape = T_Shape()
+    # t_shape = T_Shape()
     key_pressing = False
     delay = 0.1
+
     while 1:
         time_now = time.time()
 
@@ -148,21 +152,27 @@ def main(BASE_WIDTH, BASE_HEIGHT):
                 key_pressing = False
 
         if key_pressing:
-            i_shape.update(event.key)
+            i_shape.update(event.key, matrix)
             screen.blit(background, i_shape.last_location)
 
         # i_shape.fall()
 
         time.sleep(delay)
+
         screen.blit(background, i_shape.last_location)
         screen.blit(i_shape.letter_surface, (i_shape.x_pos, i_shape.y_pos))
-        screen.blit(t_shape.letter_surface, (t_shape.x_pos, t_shape.y_pos))
+        # screen.blit(t_shape.letter_surface, (t_shape.x_pos, t_shape.y_pos))
 
         for rect in wall_rects:
             row[i]['has_block'] = True
             border_square = pygame.Surface((GRID_UNIT, GRID_UNIT))
             border_square.fill(BLACK)
             screen.blit(border_square, (rect[0], rect[1]))
+        
+        for i in range(1,10,1):
+            matrix[i][14]['has_block'] = True
+            screen.fill(WHITE, (matrix[i][16]['grid_square']))
+
         pygame.display.flip()
 
 
