@@ -44,7 +44,6 @@ class T_Shape(pygame.sprite.Sprite):
 
     def update_blocks(self):
         letter_surface_top_left = self.rect.topleft
-        print('topleft', letter_surface_top_left)
 
         for i, block in enumerate(self.blocks):
             if self.angle == 0:

@@ -132,9 +132,9 @@ def main(BASE_WIDTH, BASE_HEIGHT):
                 wall_rects_right.append((left, top))
             if row_idx == 39:
                 wall_rects_bottom.append((left, top))
-    # print(matrix[1][13]) starting grid for i_shape
+
     i_shape = Shape()
-    # t_shape = T_Shape()
+    t_shape = T_Shape()
     key_pressing = False
     delay = 0.1
 
@@ -161,7 +161,7 @@ def main(BASE_WIDTH, BASE_HEIGHT):
 
         screen.blit(background, i_shape.last_location)
         screen.blit(i_shape.letter_surface, (i_shape.x_pos, i_shape.y_pos))
-        # screen.blit(t_shape.letter_surface, (t_shape.x_pos, t_shape.y_pos))
+        screen.blit(t_shape.letter_surface, (t_shape.x_pos, t_shape.y_pos))
 
         for rect in wall_rects:
             row[i]['has_block'] = True
@@ -169,9 +169,16 @@ def main(BASE_WIDTH, BASE_HEIGHT):
             border_square.fill(BLACK)
             screen.blit(border_square, (rect[0], rect[1]))
         
-        for i in range(1,10,1):
-            matrix[i][14]['has_block'] = True
-            screen.fill(WHITE, (matrix[i][16]['grid_square']))
+            letter_surface = pygame.Surface(
+            (45, 30), pygame.SRCALPHA, 32).convert_alpha()
+            matrix[6][16]['has_block'] = True
+            matrix[7][16]['has_block'] = True
+            matrix[7][15]['has_block'] = True
+            matrix[7][17]['has_block'] = True
+            screen.blit(letter_surface, (matrix[6][16]['grid_square']))
+            screen.blit(letter_surface, (matrix[7][16]['grid_square']))
+            screen.blit(letter_surface, (matrix[7][15]['grid_square']))
+            screen.blit(letter_surface, (matrix[7][17]['grid_square']))
 
         pygame.display.flip()
 
