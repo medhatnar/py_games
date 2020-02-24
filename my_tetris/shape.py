@@ -67,39 +67,33 @@ class Shape(pygame.sprite.Sprite):
                     block.y = letter_surface_top_left[1]
                 block.rect = pygame.Rect(
                     (block.x, block.y), (GRID_UNIT, GRID_UNIT))
-
         return blocks
 
     def collision_detection(self, matrix, direction, width_and_height):
+        t = [matrix[6][16], matrix[7][16], matrix[7][15], matrix[7][17]]
         new_locations = self.future_locations(
             self.blocks.copy(), direction, width_and_height)
-        for i, row in enumerate(matrix):
-            for j, column in enumerate(row):
-                curr_rect = matrix[i][j]
-                hitbox = curr_rect['grid_square']
 
-                if direction == -H_SPEED:
-                    if hitbox.colliderect(new_locations[0].rect) and curr_rect['has_block']:
-                        print(0, hitbox, 'shape_block', new_locations[0].rect)
-                        return True
-                if direction == H_SPEED:
-                    if hitbox.colliderect(new_locations[0].rect) and curr_rect['has_block']:
-                        print(0, hitbox, 'shape_block', new_locations[0].rect)
-                        return True
-                    if hitbox.colliderect(new_locations[3].rect) and curr_rect['has_block']:
-                        print(hitbox.x, hitbox.y, new_locations[0].x, new_locations[0].y)
-                        print(3, hitbox, 'shape_block', new_locations[3])
-                        return True
-                if direction == V_SPEED and self.y_pos <=590:
-                    if self.angle == 0:
-                        if hitbox.colliderect(new_locations[3].rect) and curr_rect['has_block']:
-                            print(hitbox.x, hitbox.y, new_locations[0].x, new_locations[0].y)
-                            print(3, hitbox, 'shape_block', new_locations[3])
-                            return True
-                    elif hitbox.colliderect(new_locations[0].rect) and curr_rect['has_block']:
-                            print(0, hitbox, 'shape_block', new_locations[0].rect)
-                            return True
-                    
+        for block in new_locations:
+            for curr in t:
+                if(block.x < curr['grid_square'].x + curr['grid_square'].width and block.x + block.width > curr['grid_square'].x and block.y < curr['grid_square'].y + curr['grid_square'].height and block.y + block.height > curr['grid_square'].y):
+                    print('(block1 x axis)', block.x, '< (block2 combined x axis and width)', curr['grid_square'].x + curr['grid_square'].width)
+                    print('----')
+                    print('and vice versa: ', block.x + block.width, '>', curr['grid_square'].x)
+                    print('======================================================================')
+                    print('(block1 y axis)', block.y, '< (block2 combined y axis and height)', curr['grid_square'].y + curr['grid_square'].height)
+                    print('----')
+                    print('and vice versa', block.y + block.height, ' > ', curr['grid_square'].y)
+                    return True
+                else:
+                    print('block1 x axis:', block.x, 'is less than combined block2 x axis:', curr['grid_square'].x, 'and block2 width:', curr['grid_square'].width)
+                    print('----')
+                    print('block1 x axis:', block.x, 'is greater than combined block1 width:', block.width, 'and block2 x axis:',curr['grid_square'].x)
+                    print('======================================================================')
+                    print('block1 y axis:', block.y, 'is less than block2 y axis:',curr['grid_square'].y, 'and block2 height:', curr['grid_square'].height)
+                    print('----')
+                    print('block1 y axis:', block.y, 'is greter than block1 height:', block.height, 'and block2 y axis:', curr['grid_square'].y)
+                    print('======================================================================')
 
         return False
 

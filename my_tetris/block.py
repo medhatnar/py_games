@@ -15,6 +15,8 @@ class Block(pygame.sprite.Sprite):
         self.image = load_image(color, (width, height))
         self.x = 0
         self.y = 0
+        self.width = width
+        self.height = height
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = pygame.Rect((self.x, self.y), (GRID_UNIT, GRID_UNIT))
