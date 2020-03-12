@@ -49,45 +49,27 @@ pen.hideturtle()
 pen.goto(0, 260)
 pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
 
-# Function
-def paddle_a_up():
-    y = paddle_a.ycor()
-    if (y + 20) >= 260:
-        y = paddle_a.ycor()
-    else:
-        y += 20
-    paddle_a.sety(y)
-
-def paddle_a_down():
-    y = paddle_a.ycor()
-    if (y - 20) <= -260:
-        y = paddle_a.ycor()
-    else:
-        y -= 20
-    paddle_a.sety(y)
-
-def paddle_b_up():
-    y = paddle_b.ycor()
-    if (y + 20) >= 260:
-        y = paddle_b.ycor()
-    else:
-        y += 20
-
-    paddle_b.sety(y)
-
-
-def paddle_b_down():
-    y = paddle_b.ycor()
-
-    y -= 20
-    paddle_b.sety(y)
+paddle_speed = 8
+keys_down = {}
 
 # Keyboard binding 
 wn.listen()
-wn.onkeypress(paddle_a_up, "w")
-wn.onkeypress(paddle_a_down, "s")
-wn.onkeypress(paddle_b_up, "Up")
-wn.onkeypress(paddle_b_down, "Down")
+def set_key_down(key):
+    def result():
+        keys_down[key] = 2
+    return result
+def set_key_up(key):
+    def result():
+        del keys_down[key]
+    return result
+wn.onkeypress(set_key_down('w'), "w")
+wn.onkeyrelease(set_key_up('w'), "w")
+wn.onkeypress(set_key_down('s'), "s")
+wn.onkeyrelease(set_key_up('s'), "s")
+wn.onkeypress(set_key_down('Up'), "Up")
+wn.onkeyrelease(set_key_up('Up'), "Up")
+wn.onkeypress(set_key_down('Down'), "Down")
+wn.onkeyrelease(set_key_up('Down'), "Down")
 
 def min_max_corners(box):
     center_x = box.xcor()
@@ -107,10 +89,25 @@ def collides(box_a, box_b):
            max_a_y >= min_b_y
 
 
+pressed_times = {}
+
 #  Main game loop
 start_of_frame = datetime.now()
 while True:
     wn.update()
+
+    keys_and_paddles = [('w', paddle_a, paddle_speed),
+                        ('s', paddle_a, -paddle_speed),
+                        ('Up', paddle_b, paddle_speed),
+                        ('Down', paddle_b, -paddle_speed)]
+    for key, paddle, speed in keys_and_paddles:
+        if key in keys_down:
+            pressed_times[key] = 2
+        if key in pressed_times:
+            paddle.sety(max(-260, min(260, paddle.ycor() + speed)))
+            pressed_times[key] -= 1
+            if pressed_times[key] == 0:
+                del pressed_times[key]
 
 # Move the ball
     ball.setx(ball.xcor() + ball.dx)
