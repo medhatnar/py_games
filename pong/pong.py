@@ -97,6 +97,24 @@ wn.onkeypress(paddle_a_down, "s")
 wn.onkeypress(paddle_b_up, "Up")
 wn.onkeypress(paddle_b_down, "Down")
 
+def min_max_corners(box):
+    center_x = box.xcor()
+    center_y = box.ycor()
+    shape = box.shapesize()
+    return (center_x - shape[1] * 10,
+            center_x + shape[1] * 10,
+            center_y - shape[0] * 10,
+            center_y + shape[0] * 10)
+
+def collides(box_a, box_b):
+    min_a_x, max_a_x, min_a_y, max_a_y = min_max_corners(box_a)
+    min_b_x, max_b_x, min_b_y, max_b_y = min_max_corners(box_b)
+    return min_a_x <= max_b_x and\
+           min_a_y <= max_b_y and\
+           max_a_x >= min_b_x and\
+           max_a_y >= min_b_y
+
+
 #  Main game loop
 start_of_frame = datetime.now()
 while True:
@@ -134,13 +152,15 @@ while True:
         os.system("afplay error.wav&")
 
 # Paddle and ball collisions
-    if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
-        ball.setx(340)
+    #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
+    if ball.dx > 0 and collides(ball, paddle_b):
+        #ball.setx(340)
         ball.dx *= -1
         os.system("afplay high-beep.wav&")
 
-    if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
-        ball.setx(-340)
+    #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
+    if ball.dx < 0 and collides(ball, paddle_a):
+        #ball.setx(-340)
         ball.dx *= -1
         os.system("afplay low-beep.wav&")
 
