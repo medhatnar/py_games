@@ -22,7 +22,14 @@ wn.tracer(0)
 score_a = 0
 score_b = 0
 
+#Balls Array
+balls = []
 ball = Ball().ball
+balls.append(ball)
+
+def spawn_ball():
+    ball = Ball().ball
+    balls.append(ball)
 
 # Paddle A
 paddle_a = turtle.Turtle()
@@ -136,56 +143,57 @@ while True:
             if pressed_times[key] == 0:
                 del pressed_times[key]
 
-# Move the ball
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+    # Move the ball
+    for ball in balls:
+        ball.setx(ball.xcor() + ball.dx)
+        ball.sety(ball.ycor() + ball.dy)
 
-# Border checking
-    if ball.ycor() > 290:
-        ball.sety(290)
-        ball.dy *= -1
-        os.system("afplay error.wav&")
+    # Border checking
+        if ball.ycor() > 290:
+            ball.sety(290)
+            ball.dy *= -1
+            os.system("afplay error.wav&")
 
-    if ball.ycor() < -290:
-        ball.sety(-290)
-        ball.dy *= -1
-        os.system("afplay error.wav&")
+        if ball.ycor() < -290:
+            ball.sety(-290)
+            ball.dy *= -1
+            os.system("afplay error.wav&")
 
-    if ball.xcor() > 390:
-        ball.goto(0,0)
-        ball.dx = 2
-        ball.dy = -2
-        pen.clear()
-        score_a += 1
-        pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
-        os.system("afplay error.wav&")
+        if ball.xcor() > 390:
+            ball.goto(0,0)
+            ball.dx *= -1
+            pen.clear()
+            score_a += 1
+            spawn_ball()
+            pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            os.system("afplay error.wav&")
 
-    if ball.xcor() < -390:
-        ball.goto(0,0)
-        ball.dx = -2
-        ball.dy = -2
-        pen.clear()
-        score_b += 1
-        pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
-        os.system("afplay error.wav&")
+        if ball.xcor() < -390:
+            ball.goto(0,0)
+            ball.dx *= -1
+            pen.clear()
+            score_b += 1
+            spawn_ball()
+            pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            os.system("afplay error.wav&")
 
-# Paddle and ball collisions
-    #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
-    if ball.dx > 0 and collides(ball, paddle_b):
-        #ball.setx(340)
-        collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_b.xcor(), paddle_b.ycor()), (ball.dx, ball.dy))
-        ball.dx = min(-2, collision_dir[0])
-        ball.dy = collision_dir[1]
+    # Paddle and ball collisions
+        #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
+        if ball.dx > 0 and collides(ball, paddle_b):
+            #ball.setx(340)
+            collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_b.xcor(), paddle_b.ycor()), (ball.dx, ball.dy))
+            ball.dx = min(-2, collision_dir[0])
+            ball.dy = collision_dir[1]
 
-        os.system("afplay high-beep.wav&")
+            os.system("afplay high-beep.wav&")
 
-    #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
-    if ball.dx < 0 and collides(ball, paddle_a):
-        #ball.setx(-340)
-        collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_a.xcor(), paddle_a.ycor()), (ball.dx, ball.dy))
-        ball.dx = max(2, collision_dir[0])
-        ball.dy = collision_dir[1]
-        os.system("afplay low-beep.wav&")
+        #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
+        if ball.dx < 0 and collides(ball, paddle_a):
+            #ball.setx(-340)
+            collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_a.xcor(), paddle_a.ycor()), (ball.dx, ball.dy))
+            ball.dx = max(2, collision_dir[0])
+            ball.dy = collision_dir[1]
+            os.system("afplay low-beep.wav&")
 
     end_of_frame = datetime.now()
     time_passed = end_of_frame - start_of_frame
