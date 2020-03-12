@@ -6,21 +6,27 @@ import math
 
 from ball import Ball
 
+#Screen constants
+screen_width = 800
+screen_height = 600
+screen_paddle_position = 350
+
+
 wn = turtle.Screen()
 wn.title("Pong by @narshah1n")
 wn.bgcolor("black")
-wn.setup(width=800, height=600)
+wn.setup(screen_width, screen_height)
 wn.tracer(0)
 
-#Score 
+#Score
 score_a = 0
 score_b = 0
 
 ball = Ball().ball
 
 # Paddle A
-paddle_a = turtle.Turtle() 
-paddle_a.speed(0) 
+paddle_a = turtle.Turtle()
+paddle_a.speed(0)
 paddle_a.shape("square")
 paddle_a.color("white")
 # by default this paddle is 20x20 px len 1 means keep default
@@ -29,17 +35,17 @@ paddle_a.shapesize(stretch_wid=5, stretch_len=1)
 # by default turtles draw lines as they move. we don't need that here. hence penup.
 paddle_a.penup()
 # below are the coordinates we want paddle A to start at.
-paddle_a.goto(-350, 0)
+paddle_a.goto(-screen_paddle_position, 0)
 
-    
+
 # Paddle B
-paddle_b = turtle.Turtle() 
-paddle_b.speed(0) 
+paddle_b = turtle.Turtle()
+paddle_b.speed(0)
 paddle_b.shape("square")
 paddle_b.color("white")
 paddle_b.shapesize(stretch_wid=5, stretch_len=1)
 paddle_b.penup()
-paddle_b.goto(350, 0)
+paddle_b.goto(screen_paddle_position, 0)
 
 # Pen
 pen = turtle.Turtle()
@@ -53,7 +59,7 @@ pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Cou
 paddle_speed = 8
 keys_down = {}
 
-# Keyboard binding 
+# Keyboard binding
 wn.listen()
 def set_key_down(key):
     def result():
