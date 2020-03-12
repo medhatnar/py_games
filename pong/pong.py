@@ -44,7 +44,7 @@ paddle_b.goto(350, 0)
 # Pen
 pen = turtle.Turtle()
 pen.speed(0)
-pen.color("yellow")
+pen.color("#4ad956")
 pen.penup()
 pen.hideturtle()
 pen.goto(0, 260)
@@ -138,12 +138,10 @@ while True:
     if ball.ycor() > 290:
         ball.sety(290)
         ball.dy *= -1
-        os.system("afplay error.wav&")
 
     if ball.ycor() < -290:
         ball.sety(-290)
         ball.dy *= -1
-        os.system("afplay error.wav&")
 
     if ball.xcor() > 390:
         ball.goto(0,0)
@@ -152,7 +150,7 @@ while True:
         pen.clear()
         score_a += 1
         pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
-        os.system("afplay error.wav&")
+        os.system("afplay Ring_Right_Channel.wav&")
 
     if ball.xcor() < -390:
         ball.goto(0,0)
@@ -161,7 +159,7 @@ while True:
         pen.clear()
         score_b += 1
         pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
-        os.system("afplay error.wav&")
+        os.system("afplay Ring_Left_Channel.wav&")
 
 # Paddle and ball collisions
     #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
@@ -171,7 +169,7 @@ while True:
         ball.dx = min(-2, collision_dir[0])
         ball.dy = collision_dir[1]
 
-        os.system("afplay high-beep.wav&")
+        os.system("afplay Rolling.wav&")
 
     #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
     if ball.dx < 0 and collides(ball, paddle_a):
@@ -179,7 +177,7 @@ while True:
         collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_a.xcor(), paddle_a.ycor()), (ball.dx, ball.dy))
         ball.dx = max(2, collision_dir[0])
         ball.dy = collision_dir[1]
-        os.system("afplay low-beep.wav&")
+        os.system("afplay Rolling.wav&")
 
     end_of_frame = datetime.now()
     time_passed = end_of_frame - start_of_frame
