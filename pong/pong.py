@@ -2,6 +2,7 @@ import turtle
 import os
 from datetime import datetime
 import time
+import math
 
 from ball import Ball
 
@@ -88,6 +89,26 @@ def collides(box_a, box_b):
            max_a_x >= min_b_x and\
            max_a_y >= min_b_y
 
+def vec_length(vec):
+    return math.sqrt(vec[0] * vec[0] + vec[1] * vec[1])
+def vec_sub(a, b):
+    return (a[0] - b[0], a[1] - b[1])
+def vec_divide(a, b):
+    return (a[0] / b, a[1] / b)
+def vec_mul(a, b):
+    return (a[0] * b, a[1] * b)
+
+def collision_with_dir(pos_a, pos_b, old_dir):
+    #print(pos_a)
+    #print(pos_b)
+    direction = vec_sub(pos_a, pos_b)
+    direction = (direction[0], direction[1] / 2)
+    #print(direction)
+    if direction[0] == 0 and direction[1] == 0:
+        direction[0] = old_dir[0]
+    old_length = vec_length(old_dir)
+    dir_normalized = vec_divide(direction, vec_length(direction))
+    return vec_mul(dir_normalized, old_length * 1.25)
 
 pressed_times = {}
 
@@ -126,7 +147,8 @@ while True:
 
     if ball.xcor() > 390:
         ball.goto(0,0)
-        ball.dx *= -1
+        ball.dx = 2
+        ball.dy = -2
         pen.clear()
         score_a += 1
         pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
@@ -134,7 +156,8 @@ while True:
 
     if ball.xcor() < -390:
         ball.goto(0,0)
-        ball.dx *= -1
+        ball.dx = -2
+        ball.dy = -2
         pen.clear()
         score_b += 1
         pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
@@ -144,13 +167,18 @@ while True:
     #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
     if ball.dx > 0 and collides(ball, paddle_b):
         #ball.setx(340)
-        ball.dx *= -1
+        collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_b.xcor(), paddle_b.ycor()), (ball.dx, ball.dy))
+        ball.dx = min(-2, collision_dir[0])
+        ball.dy = collision_dir[1]
+
         os.system("afplay high-beep.wav&")
 
     #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
     if ball.dx < 0 and collides(ball, paddle_a):
         #ball.setx(-340)
-        ball.dx *= -1
+        collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_a.xcor(), paddle_a.ycor()), (ball.dx, ball.dy))
+        ball.dx = max(2, collision_dir[0])
+        ball.dy = collision_dir[1]
         os.system("afplay low-beep.wav&")
 
     end_of_frame = datetime.now()
