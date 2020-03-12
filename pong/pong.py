@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import time
 import math
+import random
 
 from ball import Ball
 
@@ -30,6 +31,8 @@ balls.append(ball)
 def spawn_ball():
     ball = Ball().ball
     balls.append(ball)
+    ball.dy = random.randrange(-20, 21) * 0.1
+    return ball
 
 # Paddle A
 paddle_a = turtle.Turtle()
@@ -124,6 +127,7 @@ def collision_with_dir(pos_a, pos_b, old_dir):
     return vec_mul(dir_normalized, old_length * 1.25)
 
 pressed_times = {}
+game_finished = False
 
 #  Main game loop
 start_of_frame = datetime.now()
@@ -145,8 +149,9 @@ while True:
 
     # Move the ball
     for ball in balls:
-        ball.setx(ball.xcor() + ball.dx)
-        ball.sety(ball.ycor() + ball.dy)
+        if not game_finished:
+            ball.setx(ball.xcor() + ball.dx)
+            ball.sety(ball.ycor() + ball.dy)
 
     # Border checking
         if ball.ycor() > 290:
@@ -161,20 +166,30 @@ while True:
 
         if ball.xcor() > 390:
             ball.goto(0,0)
-            ball.dx *= -1
+            ball.dx = 2
             pen.clear()
             score_a += 1
-            spawn_ball()
-            pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            new_ball = spawn_ball()
+            new_ball.dx = -2
+            if score_a == 100:
+                game_finished = True
+                pen.write(f"Player A Wins! Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            else:
+                pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
             os.system("afplay error.wav&")
 
         if ball.xcor() < -390:
             ball.goto(0,0)
-            ball.dx *= -1
+            ball.dx = -2
             pen.clear()
             score_b += 1
-            spawn_ball()
-            pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            new_ball = spawn_ball()
+            new_ball.dx = 2
+            if score_b == 100:
+                game_finished = True
+                pen.write(f"Player B Wins! Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            else:
+                pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
             os.system("afplay error.wav&")
 
     # Paddle and ball collisions
