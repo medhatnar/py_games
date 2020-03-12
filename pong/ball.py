@@ -6,7 +6,7 @@ class Ball:
         self.ball = turtle.Turtle() 
         self.ball.speed(0) 
         self.ball.shape("square")
-        self.ball.color("white")
+        self.ball.color("yellow")
         self.ball.penup()
         self.ball.goto(0, 0)
         self.ball.dx = 2

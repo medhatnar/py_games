@@ -22,7 +22,7 @@ ball = Ball().ball
 paddle_a = turtle.Turtle() 
 paddle_a.speed(0) 
 paddle_a.shape("square")
-paddle_a.color("white")
+paddle_a.color("#1a50bc")
 # by default this paddle is 20x20 px len 1 means keep default
 paddle_a.shapesize(stretch_wid=5, stretch_len=1)
 
@@ -36,7 +36,7 @@ paddle_a.goto(-350, 0)
 paddle_b = turtle.Turtle() 
 paddle_b.speed(0) 
 paddle_b.shape("square")
-paddle_b.color("white")
+paddle_b.color("#1a50bc")
 paddle_b.shapesize(stretch_wid=5, stretch_len=1)
 paddle_b.penup()
 paddle_b.goto(350, 0)
