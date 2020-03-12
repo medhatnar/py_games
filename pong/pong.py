@@ -1,5 +1,8 @@
 import turtle
 import os
+from datetime import datetime
+import time
+
 
 wn = turtle.Screen()
 wn.title("Pong by @narshah1n")
@@ -95,7 +98,7 @@ wn.onkeypress(paddle_b_up, "Up")
 wn.onkeypress(paddle_b_down, "Down")
 
 #  Main game loop
-
+start_of_frame = datetime.now()
 while True:
     wn.update()
 
@@ -140,3 +143,11 @@ while True:
         ball.setx(-340)
         ball.dx *= -1
         os.system("afplay low-beep.wav&")
+
+    end_of_frame = datetime.now()
+    time_passed = end_of_frame - start_of_frame
+    while time_passed.total_seconds() < 1.0 / 60.0:
+        time.sleep(0.001)
+        end_of_frame = datetime.now()
+        time_passed = end_of_frame - start_of_frame
+    start_of_frame = end_of_frame
