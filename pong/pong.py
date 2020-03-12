@@ -3,24 +3,40 @@ import os
 from datetime import datetime
 import time
 import math
+import random
 
 from ball import Ball
+
+#Screen constants
+screen_width = 800
+screen_height = 600
+screen_paddle_position = 350
+
 
 wn = turtle.Screen()
 wn.title("Pong by @narshah1n")
 wn.bgcolor("black")
-wn.setup(width=800, height=600)
+wn.setup(screen_width, screen_height)
 wn.tracer(0)
 
-#Score 
+#Score
 score_a = 0
 score_b = 0
 
+#Balls Array
+balls = []
 ball = Ball().ball
+balls.append(ball)
+
+def spawn_ball():
+    ball = Ball().ball
+    balls.append(ball)
+    ball.dy = random.randrange(-20, 21) * 0.1
+    return ball
 
 # Paddle A
-paddle_a = turtle.Turtle() 
-paddle_a.speed(0) 
+paddle_a = turtle.Turtle()
+paddle_a.speed(0)
 paddle_a.shape("square")
 paddle_a.color("#1a50bc")
 # by default this paddle is 20x20 px len 1 means keep default
@@ -29,17 +45,17 @@ paddle_a.shapesize(stretch_wid=5, stretch_len=1)
 # by default turtles draw lines as they move. we don't need that here. hence penup.
 paddle_a.penup()
 # below are the coordinates we want paddle A to start at.
-paddle_a.goto(-350, 0)
+paddle_a.goto(-screen_paddle_position, 0)
 
-    
+
 # Paddle B
-paddle_b = turtle.Turtle() 
-paddle_b.speed(0) 
+paddle_b = turtle.Turtle()
+paddle_b.speed(0)
 paddle_b.shape("square")
 paddle_b.color("#1a50bc")
 paddle_b.shapesize(stretch_wid=5, stretch_len=1)
 paddle_b.penup()
-paddle_b.goto(350, 0)
+paddle_b.goto(screen_paddle_position, 0)
 
 # Pen
 pen = turtle.Turtle()
@@ -53,7 +69,7 @@ pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Cou
 paddle_speed = 8
 keys_down = {}
 
-# Keyboard binding 
+# Keyboard binding
 wn.listen()
 def set_key_down(key):
     def result():
@@ -111,6 +127,7 @@ def collision_with_dir(pos_a, pos_b, old_dir):
     return vec_mul(dir_normalized, old_length * 1.25)
 
 pressed_times = {}
+game_finished = False
 
 #  Main game loop
 start_of_frame = datetime.now()
@@ -130,54 +147,66 @@ while True:
             if pressed_times[key] == 0:
                 del pressed_times[key]
 
-# Move the ball
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+    # Move the ball
+    for ball in balls:
+        if not game_finished:
+            ball.setx(ball.xcor() + ball.dx)
+            ball.sety(ball.ycor() + ball.dy)
 
-# Border checking
-    if ball.ycor() > 290:
-        ball.sety(290)
-        ball.dy *= -1
+    # Border checking
+        if ball.ycor() > 290:
+            ball.sety(290)
+            ball.dy *= -1
 
-    if ball.ycor() < -290:
-        ball.sety(-290)
-        ball.dy *= -1
+        if ball.ycor() < -290:
+            ball.sety(-290)
+            ball.dy *= -1
 
-    if ball.xcor() > 390:
-        ball.goto(0,0)
-        ball.dx = 2
-        ball.dy = -2
-        pen.clear()
-        score_a += 1
-        pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
-        os.system("afplay Ring_Right_Channel.wav&")
+        if ball.xcor() > 390:
+            ball.goto(0,0)
+            ball.dx = 2
+            pen.clear()
+            score_a += 1
+            new_ball = spawn_ball()
+            new_ball.dx = -2
+            if score_a == 100:
+                game_finished = True
+                pen.write(f"Player A Wins! Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            else:
+                pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            os.system("afplay Ring_Right_Channel.wav&")
 
-    if ball.xcor() < -390:
-        ball.goto(0,0)
-        ball.dx = -2
-        ball.dy = -2
-        pen.clear()
-        score_b += 1
-        pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
-        os.system("afplay Ring_Left_Channel.wav&")
+        if ball.xcor() < -390:
+            ball.goto(0,0)
+            ball.dx = -2
+            pen.clear()
+            score_b += 1
+            new_ball = spawn_ball()
+            new_ball.dx = 2
+            if score_b == 100:
+                game_finished = True
+                pen.write(f"Player B Wins! Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            else:
+                pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "bold"))
+            os.system("afplay Ring_Left_Channel.wav&")
 
-# Paddle and ball collisions
-    #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
-    if ball.dx > 0 and collides(ball, paddle_b):
-        #ball.setx(340)
-        collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_b.xcor(), paddle_b.ycor()), (ball.dx, ball.dy))
-        ball.dx = min(-2, collision_dir[0])
-        ball.dy = collision_dir[1]
+    # Paddle and ball collisions
+        #if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50):
+        if ball.dx > 0 and collides(ball, paddle_b):
+            #ball.setx(340)
+            collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_b.xcor(), paddle_b.ycor()), (ball.dx, ball.dy))
+            ball.dx = min(-2, collision_dir[0])
+            ball.dy = collision_dir[1]
 
-        os.system("afplay Rolling.wav&")
+            os.system("afplay Rolling.wav&")
 
-    #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
-    if ball.dx < 0 and collides(ball, paddle_a):
-        #ball.setx(-340)
-        collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_a.xcor(), paddle_a.ycor()), (ball.dx, ball.dy))
-        ball.dx = max(2, collision_dir[0])
-        ball.dy = collision_dir[1]
-        os.system("afplay Rolling.wav&")
+        #if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50):
+        if ball.dx < 0 and collides(ball, paddle_a):
+            #ball.setx(-340)
+            collision_dir = collision_with_dir((ball.xcor(), ball.ycor()), (paddle_a.xcor(), paddle_a.ycor()), (ball.dx, ball.dy))
+            ball.dx = max(2, collision_dir[0])
+            ball.dy = collision_dir[1]
+            os.system("afplay Rolling.wav&")
 
     end_of_frame = datetime.now()
     time_passed = end_of_frame - start_of_frame
