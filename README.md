@@ -6,7 +6,7 @@ Built with the Turtle module and Pygame.
 
 # Pong
 
-# Game
+# Tetris
 
 # Graphics
 
