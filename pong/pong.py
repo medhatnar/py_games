@@ -1,5 +1,6 @@
 import turtle
 import os
+from ball import Ball
 
 wn = turtle.Screen()
 wn.title("Pong by @narshah1n")
@@ -10,6 +11,8 @@ wn.tracer(0)
 #Score 
 score_a = 0
 score_b = 0
+
+ball = Ball().ball
 
 # Paddle A
 paddle_a = turtle.Turtle() 
