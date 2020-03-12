@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import time
 
+from ball import Ball
 
 wn = turtle.Screen()
 wn.title("Pong by @narshah1n")
@@ -13,6 +14,8 @@ wn.tracer(0)
 #Score 
 score_a = 0
 score_b = 0
+
+ball = Ball().ball
 
 # Paddle A
 paddle_a = turtle.Turtle() 
@@ -36,17 +39,6 @@ paddle_b.color("white")
 paddle_b.shapesize(stretch_wid=5, stretch_len=1)
 paddle_b.penup()
 paddle_b.goto(350, 0)
-
-# Ball
-ball = turtle
-ball = turtle.Turtle() 
-ball.speed(0) 
-ball.shape("square")
-ball.color("white")
-ball.penup()
-ball.goto(0, 0)
-ball.dx = 2
-ball.dy = 2
 
 # Pen
 pen = turtle.Turtle()
