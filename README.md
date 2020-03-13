@@ -4,9 +4,7 @@ Built with the Turtle module and Pygame.
 
 # Animated Tic-Tac-Toe
 
-# Pong
-
-# Tetris
+# Crazy Pong (Sonic themed) 
 
 # Graphics
 
